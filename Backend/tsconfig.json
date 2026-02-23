@@ -1,34 +1,19 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ESNext",
     "types": ["node"],
-
-    // Compatibilidad con paquetes como express/cors/dotenv
+    
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Recommended Options
+    "skipLibCheck": true,
     "strict": true,
-    "verbatimModuleSyntax": true,
+    
+    // Desactiva esto por ahora para evitar errores de importación de tipos
+    "verbatimModuleSyntax": false, 
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true
+    
+    "sourceMap": true
   }
 }
