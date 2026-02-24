@@ -1,1 +1,13 @@
-<p>generator works!</p>
+<div class="mb-3">
+  <label class="form-label">Nombre del Invitado</label>
+  <input type="text" [(ngModel)]="guestName" class="form-control" placeholder="Ej. Juan Pérez">
+</div>
+
+<button (click)="onGenerate()" [disabled]="loading" class="btn btn-primary w-100">
+  {{ loading ? 'Generando...' : 'Generar Código Único' }}
+</button>
+
+<div *ngIf="generatedCode" class="mt-4 p-3 bg-light text-center border rounded">
+  <small>Código generado:</small>
+  <h2 class="text-primary fw-bold">{{ generatedCode }}</h2>
+</div>
