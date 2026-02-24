@@ -17,4 +17,12 @@ export class PassService {
   validatePass(code: string): Observable<any> {
     return this.http.get(`${this.API_URL}/validate/${code}`);
   }
+
+  usePass(code: string): Observable<any> {
+    return this.http.patch(`${this.API_URL}/use/${code}`, {});
+  }
+
+  getHourlyStats(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3000/api/stats/hourly-flow');  }
 }
+

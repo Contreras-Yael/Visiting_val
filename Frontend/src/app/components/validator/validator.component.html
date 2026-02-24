@@ -1,27 +1,20 @@
 <div class="container py-4">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow border-0">
-        <div class="card-header bg-dark text-white p-3 text-center">
-          <h4 class="mb-0"><i class="bi bi-shield-lock"></i> Control de acceso</h4>
-        </div>
-        <div class="card-body p-4">
-          <p class="text-center text-muted">ingrese el codigo del pase de visitante</p>
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+    <div class="card-body p-4">
+      <h3 class="text-center mb-4">Validación de Guardia</h3>
 
-          <div class="input-group input-group-lg mb-4">
-            <span class="input-group-text bg-white"><i class="bi bi-key"></i></span>
-            <input type="text" class="form-control" placeholder="Ej: VIS-A1B3" style="text-transform: uppercase;">
-          </div>
-          <button class="btn btn-success btn-lg w-100 mb-3">
-            <i class="bi bi-check-circle"></i> Validar Pase
-          </button>
+      <input type="text" [(ngModel)]="accessCode" class="form-control form-control-lg text-center mb-3" placeholder="VIS-XXXX">
 
-          <div class="alert alert-info mt-3 border-0 d-flex align-items-center" role="alert">
-            <i class="bi bi-info-circle-fill me-2 fs-4"></i>
-          <div>
-            Esperando codigo para validar...
-          </div>
-        </div>
+      <button (click)='checkCode()' class="btn btn-dark btn-lg w-100 mb-4">Verificar</button>
+
+      <div *ngIf="errorMessage" class="alert alert-danger text-center">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="result?.valid" class="card bg-light border-success p-3 text-center">
+        <h5 class="text-success">CÓDIGO VÁLIDO</h5>
+        <p class="mb-3">Invitado: <strong>{{ result.guestName }}</strong></p>
+        <button (click)="confirmEntry()" class="btn btn-success">Registrar Entrada</button>
       </div>
     </div>
   </div>

@@ -1,1 +1,23 @@
-<p>dashboard works!</p>
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white shadow-sm border-0">
+      <div class="card-body text-center">
+        <h6>Total hoy</h6>
+        <h2 class="fw-bold">{{totalHoy}}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success text-white shadow-sm border-0">
+      <div class="card-body text-center">
+        <h6>Ingresos</h6>
+        <h2 class="fw-bold">{{ingresosHoy}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 p-4">
+  <h5 class="text-muted mb-4">Flujo de Visitantes por Hora</h5>
+  <canvas #barChart></canvas>
+</div>

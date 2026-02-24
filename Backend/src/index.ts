@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Pass } from './models/Pass.js'; 
 import { generateAccessCode } from './utils/codegenerator.js';
+import e from 'express';
 
 dotenv.config();
 
@@ -57,6 +58,11 @@ app.get('/api/passes/validate/:code', async (req, res) => {
   try {
     const { code } = req.params;
     const pass = await Pass.findOne({ accessCode: code });
+    const updatePass= await Pass.findOneAndUpdate(
+      { accessCode: code, status: 'PENDING' },
+      { status: 'EXPIRED' },
+      { new: true }
+    );
 
     if (!pass) {
       return res.status(404).json({ valid: false, message: 'Pass no encontrado' });
@@ -71,7 +77,7 @@ app.get('/api/passes/validate/:code', async (req, res) => {
     }
 
     const now = new Date();
-    if (now > pass.expiresAt) {
+    if (pass.expiresAt && now > pass.expiresAt) {
       return res.status(403).json({ valid: false, message: 'Pass expirado' });
     }
 
@@ -90,21 +96,28 @@ app.get('/api/passes/validate/:code', async (req, res) => {
 app.patch('/api/passes/use/:code', async (req, res) => {
   try {
     const { code } = req.params;
-    const updatedPass = await Pass.findOneAndUpdate(
-      { accessCode: code, status: 'PENDING' },
-      { status: 'USED' },
-      { new: true }
+    const pass = await Pass.findOne(
+      { accessCode: code},
+      // { status: 'USED' },
+      // { new: true }
     );
-    if (!updatedPass) {
-      return res.status(400).json({ message: 'No se pudo procesar el pase' });
+    if (!pass) {
+      return res.status(404).json({ message: 'Pase no encontrado' });
     }
 
-    res.json({ message: 'Entrada registrada. Pase inválido para futuros usos' });
+    if (pass.status === 'USED') {
+      return res.status(400).json({ message: 'Este pase ya fue utilizado' });
+    }
+    pass.status = 'USED';
+    pass.usedAt = new Date();
+    await pass.save();
+
+    res.json({ message: 'Entrada registrada. Pase inválido para futuros usos', pass });
   } catch (error) {
     res.status(500).json({ message: 'Error al actualizar el pass' });
   }
 
-})
+});
 
 app.get('/api/passes/stats', async (req, res) => {
   try {
@@ -124,3 +137,38 @@ app.get('/api/passes/stats', async (req, res) => {
     res.status(500).json({ message: 'Error al obtener estadísticas' });
   }
 });
+
+app.get('/api/stats/hourly', async (req, res) => {
+  try {
+    const stats = await Pass.aggregate([
+      {$match: {status:'USED'}},
+      {$group: {
+        _id: {$hour: "$usedAt"},
+        count: {$sum: 1}
+      }
+    },
+    {$sort: {"_id":1}}
+    ]);
+
+    res.json(stats);
+  }catch (error) {
+    res.status(500).json({ message: 'Error al obtener estadísticas' });
+  }
+}); 
+
+app.get('/api/stats/hourly-flow', async (req, res) => {
+  try {
+    const flow = await Pass.aggregate([
+      {$match:{status:'USED'}},
+      {$group: {
+        _id: {$hour: "$usedAt"},
+        count: {$sum: 1}
+      }},
+      {$sort: {"_id":1}}
+    ]);
+
+    res.json(flow);
+  }catch (error) {
+    res.status(500).send(error);
+  }
+}); 
