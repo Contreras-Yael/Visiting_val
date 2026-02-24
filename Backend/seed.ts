@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import Pass from './src/models/Pass.js';
+import {Pass} from './src/models/Pass.js';
 
 const MONGO_URI = 'mongodb://127.0.0.1:27017/visiting_db';
 
