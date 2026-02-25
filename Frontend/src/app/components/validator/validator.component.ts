@@ -3,7 +3,8 @@ import { PassService } from 'src/app/services/pass.service';
 
 @Component({
   selector: 'app-validator',
-  templateUrl: './validator.component.html'
+  templateUrl: './validator.component.html',
+  styleUrls: ['./validator.component.scss']
 })
 export class ValidatorComponent {
   accessCode: string = '';

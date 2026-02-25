@@ -159,9 +159,9 @@ app.get('/api/stats/hourly', async (req, res) => {
 app.get('/api/stats/hourly-flow', async (req, res) => {
   try {
     const flow = await Pass.aggregate([
-      {$match:{status:'USED'}},
+      //{$match:{status:'USED'}},
       {$group: {
-        _id: {$hour: "$usedAt"},
+        _id: {$hour: "$createdAt"},
         count: {$sum: 1}
       }},
       {$sort: {"_id":1}}
@@ -170,5 +170,41 @@ app.get('/api/stats/hourly-flow', async (req, res) => {
     res.json(flow);
   }catch (error) {
     res.status(500).send(error);
+  }
+}); 
+
+app.get('/api/stats/status-distribution', async (req, res) => {
+  try {
+    const now = new Date();
+    //const stats = await Pass.aggregate([
+    //   { $group: { _id: "$status", count: { $sum: 1 } } }
+    // ]);
+    const stats = await Pass.aggregate([
+      {
+        $project: {
+          status: {
+            $cond: {
+              if:{
+                $and: [
+                  { $eq: ['$status', 'PENDING'] },
+                  { $gt: ['$expiresAt', now] }
+                ]
+              },
+              then: 'EXPIRED',
+              else: '$status'
+            }
+          }
+      }
+    },
+        {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 }
+          }
+        }
+    ]);
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json(error);
   }
 }); 

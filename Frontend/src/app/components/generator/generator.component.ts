@@ -1,10 +1,12 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { PassService } from 'src/app/services/pass.service';
+
 @Component({
   selector: 'app-generator',
   templateUrl: './generator.component.html',
+  styleUrls: ['./generator.component.scss']
 })
-export class GeneratorComponent{
+export class GeneratorComponent {
   guestName: string = '';
   generatedCode: string = '';
   loading: boolean = false;

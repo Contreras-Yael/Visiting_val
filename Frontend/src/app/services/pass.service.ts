@@ -23,6 +23,11 @@ export class PassService {
   }
 
   getHourlyStats(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:3000/api/stats/hourly-flow');  }
+    return this.http.get<any[]>('http://localhost:3000/api/stats/hourly-flow');
+  }
+
+  getStats(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:3000/api/stats/status-distribution');
+  }
 }
 

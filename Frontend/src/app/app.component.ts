@@ -6,5 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Frontend';
+  //title = 'Frontend';
+  isToggled=false;
+
+  toggleSidebar(){
+    const wrapper = document.getElementById('wrapper');
+    if(wrapper) {
+      wrapper.classList.toggle('toggled');
+      this.isToggled = wrapper.classList.contains('toggled');
+    }
+  }
+
 }

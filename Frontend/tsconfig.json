@@ -1,20 +1,30 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-//    "baseUrl": "./",
+    //"ignoreDeprecations": "6.0",
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "module": "nodenext",
+    "module": "esnext",
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "chart.js": ["node_modules/chart.js/dist/Chart.js"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": true
   }
 }
