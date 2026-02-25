@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 const PASS_EXPIRY_CONFIG = {
-  value: 3,          // Cambiar este número
+  value: 1,          // Cambiar este número
   unit: 'minutes'     // 'minutes', 'hours', 'days'
 };
 
