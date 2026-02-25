@@ -11,8 +11,8 @@ const passSchema = new Schema({
   },
   visitingType:{
     type: String,
-    enum: ['FRECUENTE', 'UNICA', 'SERVICIO'],
-    default: 'UNICA'
+    enum: ['FRECUENTLY', 'UNIQUE', 'SERVICE'],
+    default: 'UNIQUE'
   },
   createdAt: { type: Date, default: Date.now },
   expiresAt: { type: Date },
