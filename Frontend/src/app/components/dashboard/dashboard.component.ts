@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Chart } from 'Chart.js';
 import { PassService } from 'src/app/services/pass.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // 1. Declaración de ViewChilds al inicio
   @ViewChild('barChart') chartCanvas!: ElementRef;
   @ViewChild('pieChart') pieCanvas!: ElementRef;
@@ -16,36 +17,49 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   totalHoy = 0;
   ingresosHoy = 0;
 
+  // Suscripción para recarga automática
+  private dataSubscription?: Subscription;
+  private chartsReady = false;
+
   constructor(private passService: PassService) { }
 
   ngOnInit() {
-    // Solo cargamos los KPIs aquí para que la UI no se vea vacía
-    this.passService.getHourlyStats().subscribe(stats => {
-      this.totalHoy = stats.reduce((acc, item) => acc + item.count, 0);
-      this.ingresosHoy = this.totalHoy;
-      const fullDayData = new Array(24).fill(0);
-      stats.forEach(item => {
-        if(item._id >= 0 && item._id <= 24)
-          fullDayData[item._id] = item.count;
-      });
-      if(this.chartCanvas) {
-        this.renderChart(fullDayData.slice(8,20));
-      }
+    this.cargarDatos();
+    // Inicia recarga automática cada 30 segundos
+    this.dataSubscription = interval(30000).subscribe(() => {
+      this.cargarDatos();
     });
   }
 
   ngAfterViewInit() {
+    this.chartsReady = true;
+    this.cargarDatos();
+  }
 
+  ngOnDestroy() {
+    // Limpia la suscripción para evitar memory leaks
+    this.dataSubscription?.unsubscribe();
+  }
+
+  cargarDatos() {
+    if (!this.chartsReady) return;
+
+    // Cargar estadísticas por hora
     this.passService.getHourlyStats().subscribe(stats => {
+      this.totalHoy = stats.reduce((acc, item) => acc + item.count, 0);
+      this.ingresosHoy = this.totalHoy;
       const fullDayData = new Array(24).fill(0);
       stats.forEach(item => {
         if (item._id >= 0 && item._id < 24) {
           fullDayData[item._id] = item.count;
         }
       });
-      this.renderChart(fullDayData.slice(8, 20));
+      if (this.chartCanvas) {
+        this.renderChart(fullDayData.slice(8, 20));
+      }
     });
 
+    // Cargar estadísticas de estado de pases
     this.passService.getStats().subscribe(data => {
       console.log("Datos de la Dona:", data);
       if (data && data.length > 0) {
@@ -114,8 +128,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         labels: labels,
         datasets: [{
           data: dataPoints,
-          backgroundColor: colors,
-          hoverOffset: 4
+          backgroundColor: colors
         }]
       },
       options: {

@@ -1,0 +1,17 @@
+.chart-container {
+  position: relative;
+  height: 400px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  margin-bottom: 1.5rem;
+}
+
+h5.text-muted {
+  font-weight: 600;
+  color: #6c757d !important;
+}

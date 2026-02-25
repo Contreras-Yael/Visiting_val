@@ -12,6 +12,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const PASS_EXPIRY_CONFIG = {
+  value: 3,          // Cambiar este número
+  unit: 'minutes'     // 'minutes', 'hours', 'days'
+};
+
 const PORT = process.env.PORT || 3000;
 //const MONGO_URI = process.env.MONGO_URI || 'tu_url_de_mongo_aqui';
 const MONGO_URI = process.env.MONGO_URI || 'tu_url_de_mongo_aqui';
@@ -30,11 +35,20 @@ app.listen(PORT, () => {
 
 app.post('/api/passes', async (req, res) => {
   try {
-    const { guestName, hostId, daysValid = 1 } = req.body;
-    const accessCode = generateAccessCode();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + daysValid);
+     const { guestName, hostId } = req.body;
+     const accessCode = generateAccessCode();
+    // , daysValid = 1 const expiresAt = new Date();
+    // expiresAt.setDate(expiresAt.getDate() + daysValid);
 
+  const expiresAt = new Date();
+    if (PASS_EXPIRY_CONFIG.unit === 'minutes') {
+  expiresAt.setMinutes(expiresAt.getMinutes() + PASS_EXPIRY_CONFIG.value);
+    } else if (PASS_EXPIRY_CONFIG.unit === 'hours') {
+  expiresAt.setHours(expiresAt.getHours() + PASS_EXPIRY_CONFIG.value);
+    } else {
+  expiresAt.setDate(expiresAt.getDate() + PASS_EXPIRY_CONFIG.value);
+    }
+    
     const newPass = new Pass({
       guestName,
       accessCode,
@@ -187,7 +201,7 @@ app.get('/api/stats/status-distribution', async (req, res) => {
               if:{
                 $and: [
                   { $eq: ['$status', 'PENDING'] },
-                  { $gt: ['$expiresAt', now] }
+                  { $lt: ['$expiresAt', now] }
                 ]
               },
               then: 'EXPIRED',

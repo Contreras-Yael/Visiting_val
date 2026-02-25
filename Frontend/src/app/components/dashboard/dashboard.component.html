@@ -17,24 +17,22 @@
   </div>
 </div>
 
-<div class="card shadow-sm border-0 p-4">
-  <h5 class="text-muted mb-4">Flujo de Visitantes por Hora</h5>
-  <canvas #barChart></canvas>
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="card shadow-sm border-0 p-4">
+      <h5 class="text-muted mb-4">Flujo de Visitantes por Hora</h5>
+      <canvas #barChart></canvas>
+    </div>
+  </div>
 </div>
-
 
 <div class="row">
-  <div class="col-md-8">
-    <canvas #myChart></canvas>
-  </div>
-  <div class="col-md-4">
-    <canvas #pieChart></canvas>
-  </div>
-</div>
-
-<div class="col-md-4">
-  <div class="card shadow-sm border-0 p-4">
-    <h5 class="text-muted mb-4">Estado de Pases</h5>
-    <canvas #pieChart></canvas>
+  <div class="col-md-6 offset-md-3">
+    <div class="card shadow-sm border-0 p-4">
+      <h5 class="text-muted mb-4 text-center">Estado de Pases</h5>
+      <div class="chart-container">
+        <canvas #pieChart></canvas>
+      </div>
+    </div>
   </div>
 </div>
