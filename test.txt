@@ -1,0 +1,35 @@
+Postman
+
+Antigravity
+Nosql booster for mongo
+
+Discord
+
+Mongo 4.4.12(espera de indicaciones)
+(Nosql 6.2.17)
+
+
+Nvm(node(16.20.2))
+
+Angular 11.0.7
+
+
+Visual
+Rpm supo
+Angular essential
+Copilot chat
+Angular lenguaje service
+—— —  snippets
+Better commets 
+Editor con
+Database client jdbc
+Editor config
+ESlint
+Gitgraph 
+Git history
+Gitlens
+Javascript y typescropt niglytr
+Live server
+Material icon theme
+Peacock
+Vscode’pokemon
