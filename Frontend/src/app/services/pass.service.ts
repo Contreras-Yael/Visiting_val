@@ -29,5 +29,9 @@ export class PassService {
   getStats(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:3000/api/stats/status-distribution');
   }
+
+  getuser(): Observable<any> {
+    return this.http.get('http://localhost:3000/api/login');
+  }
 }
 

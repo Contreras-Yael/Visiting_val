@@ -8,6 +8,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { GeneratorComponent } from './components/generator/generator.component';
 import { ValidatorComponent } from './components/validator/validator.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
   declarations: [

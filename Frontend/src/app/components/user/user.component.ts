@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PassService } from 'src/app/services/pass.service';
 //import {llave} from '..//';
 //import { PassService } from './pass.service';
 
@@ -9,23 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class UserComponent implements OnInit {
-  login_sess: string= '';
-  errorMessage: string = '';
+  login_data = { email: '', password: '' };
 
- //constructor() { }
+ constructor( private passService: PassService, private router: Router){}
 
- ngOnInit(): void {
-   this.authService.login(this.login_sess).subscribe({
-     next: (res) => {
-       console.log('Login exitoso:', res);
-     },
-     error: (err) => {
-       this.errorMessage = err.error.message || 'Error al iniciar sesión.';
-       console.error('Error de login:', err);
-     }
-   });
- }
-
+  entrar(){
+    this.passService.login(this.login_data).subscribe(res => {
+      localStorage.setItem('token', res.token);
+      this.router.navigate(['/dashboard']);
+    });
+  }
 }
-
-

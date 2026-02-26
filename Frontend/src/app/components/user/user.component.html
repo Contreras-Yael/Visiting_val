@@ -3,19 +3,10 @@
     <div class="card-body p-4">
       <h3 class="text-center mb-4">Iniciar Sesión</h3>
 
-      <input type="text" [(ngModel)]="login_sess" class="form-control form-control-lg text-center mb-3" placeholder="VIS-XXXX">
+      <input [(ngModel)]="login_data.email" placeholder="Usuario">
+      <input [(ngModel)]="login_data.password" type="password">
 
-      <button (click)="login()" class="btn btn-dark btn-lg w-100 mb-4">Iniciar sesion</button>
-
-      <div *ngIf="errorMessage" class="alert alert-danger text-center">
-        {{ errorMessage }}
-      </div>
-
-      <!-- <div *ngIf="result?.valid" class="card bg-light border-success p-3 text-center">
-        <h5 class="text-success">CÓDIGO VÁLIDO</h5>
-        <p class="mb-3">Invitado: <strong>{{ result.guestName }}</strong></p>
-        <button (click)="confirmEntry()" class="btn btn-success">Registrar Entrada</button>
-      </div> -->
+      <button (click)="entrar()" class="btn btn-dark btn-lg w-100 mb-4">Iniciar sesion</button>
     </div>
   </div>
 </div>

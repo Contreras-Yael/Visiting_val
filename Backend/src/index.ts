@@ -230,10 +230,10 @@ expre.get('/api/stats/status-distribution', async (req, res) => {
 
 //Post evaluacion
 expre.post('/api/login', (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if( username ==="admin" && password === "admin123"){
-    const token = jwt.sign({ username }, llave, {expiresIn: '1h' });
+  if( email ==="admin@visitingval.com" && password === "admin123"){
+    const token = jwt.sign({ email }, llave, {expiresIn: '1h' });
     res.json({ token });
   }
 
