@@ -15,7 +15,7 @@ export class GeneratorComponent {
 
   onGenerate() {
     if (!this.guestName)
-      return alert('Pon un nombre.');
+      return alert('Escribe tu correo.');
 
       this.loading = true;
       this.passService.createPass(this.guestName, 'Host_Admin').subscribe({

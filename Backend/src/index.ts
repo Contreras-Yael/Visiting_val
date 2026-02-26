@@ -4,13 +4,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Pass } from './models/Pass.js'; 
 import { generateAccessCode } from './utils/codegenerator.js';
-import e from 'express';
+import jwt from 'jsonwebtoken';
+//import e from 'express';
+
+const llave= "Yael";
 
 dotenv.config();
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+const expre = express();
+expre.use(express.json());
+expre.use(cors());
 
 const PASS_EXPIRY_CONFIG = {
   value: 1,          // Cambiar este número
@@ -18,37 +21,42 @@ const PASS_EXPIRY_CONFIG = {
 };
 
 const PORT = process.env.PORT || 3000;
-//const MONGO_URI = process.env.MONGO_URI || 'tu_url_de_mongo_aqui';
-const MONGO_URI = process.env.MONGO_URI || 'tu_url_de_mongo_aqui';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/visitorpass';
+
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Conectado a MongoDB'))
   .catch(err => console.error('Error de conexión:', err));
 
-app.get('/', (req, res) => {
+expre.get('/', (req, res) => {
   res.send('API de Visitor Pass funcionando ');
 });
 
-app.listen(PORT, () => {
+expre.listen(PORT, () => {
   console.log(`Server corriendo en http://localhost:${PORT}`);
 });
 
-app.post('/api/passes', async (req, res) => {
+expre.post('/api/passes', async (req, res) => {
   try {
      const { guestName, hostId } = req.body;
      const accessCode = generateAccessCode();
-    // , daysValid = 1 const expiresAt = new Date();
-    // expiresAt.setDate(expiresAt.getDate() + daysValid);
 
   const expiresAt = new Date();
-    if (PASS_EXPIRY_CONFIG.unit === 'minutes') {
-  expiresAt.setMinutes(expiresAt.getMinutes() + PASS_EXPIRY_CONFIG.value);
-    } else if (PASS_EXPIRY_CONFIG.unit === 'hours') {
-  expiresAt.setHours(expiresAt.getHours() + PASS_EXPIRY_CONFIG.value);
-    } else {
-  expiresAt.setDate(expiresAt.getDate() + PASS_EXPIRY_CONFIG.value);
+    switch (PASS_EXPIRY_CONFIG.unit) {
+
+      case 'minutes':
+        expiresAt.setMinutes(expiresAt.getMinutes() + PASS_EXPIRY_CONFIG.value);
+        break;
+      case 'hours':
+        expiresAt.setHours(expiresAt.getHours() + PASS_EXPIRY_CONFIG.value);
+        break;
+      case 'days':
+        expiresAt.setDate(expiresAt.getDate() + PASS_EXPIRY_CONFIG.value);
+        break;
+      default:
+        expiresAt.setMinutes(expiresAt.getMinutes() + 60);
     }
-    
+
     const newPass = new Pass({
       guestName,
       accessCode,
@@ -59,7 +67,7 @@ app.post('/api/passes', async (req, res) => {
     await newPass.save();
 
     res.status(201).json({
-      message: 'Pass creado exitosamente',
+      message: 'Pass creado',
       pass: newPass
     });
   } catch (error) {
@@ -68,7 +76,7 @@ app.post('/api/passes', async (req, res) => {
   }
 });
 
-app.get('/api/passes/validate/:code', async (req, res) => {
+expre.get('/api/passes/validate/:code', async (req, res) => {
   try {
     const { code } = req.params;
     const pass = await Pass.findOne({ accessCode: code });
@@ -107,14 +115,13 @@ app.get('/api/passes/validate/:code', async (req, res) => {
   }
 });
 
-app.patch('/api/passes/use/:code', async (req, res) => {
+expre.patch('/api/passes/use/:code', async (req, res) => {
   try {
     const { code } = req.params;
     const pass = await Pass.findOne(
       { accessCode: code},
-      // { status: 'USED' },
-      // { new: true }
     );
+
     if (!pass) {
       return res.status(404).json({ message: 'Pase no encontrado' });
     }
@@ -133,7 +140,7 @@ app.patch('/api/passes/use/:code', async (req, res) => {
 
 });
 
-app.get('/api/passes/stats', async (req, res) => {
+expre.get('/api/passes/stats', async (req, res) => {
   try {
     const total = await Pass.countDocuments();
     const used = await Pass.countDocuments({ status: 'USED' });
@@ -152,7 +159,7 @@ app.get('/api/passes/stats', async (req, res) => {
   }
 });
 
-app.get('/api/stats/hourly', async (req, res) => {
+expre.get('/api/stats/hourly', async (req, res) => {
   try {
     const stats = await Pass.aggregate([
       {$match: {status:'USED'}},
@@ -170,10 +177,9 @@ app.get('/api/stats/hourly', async (req, res) => {
   }
 }); 
 
-app.get('/api/stats/hourly-flow', async (req, res) => {
+expre.get('/api/stats/hourly-flow', async (req, res) => {
   try {
     const flow = await Pass.aggregate([
-      //{$match:{status:'USED'}},
       {$group: {
         _id: {$hour: "$createdAt"},
         count: {$sum: 1}
@@ -187,12 +193,9 @@ app.get('/api/stats/hourly-flow', async (req, res) => {
   }
 }); 
 
-app.get('/api/stats/status-distribution', async (req, res) => {
+expre.get('/api/stats/status-distribution', async (req, res) => {
   try {
     const now = new Date();
-    //const stats = await Pass.aggregate([
-    //   { $group: { _id: "$status", count: { $sum: 1 } } }
-    // ]);
     const stats = await Pass.aggregate([
       {
         $project: {
@@ -222,3 +225,29 @@ app.get('/api/stats/status-distribution', async (req, res) => {
     res.status(500).json(error);
   }
 }); 
+
+
+
+//Post evaluacion
+expre.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if( username ==="admin" && password === "admin123"){
+    const token = jwt.sign({ username }, llave, {expiresIn: '1h' });
+    res.json({ token });
+  }
+
+  res.status(401).json({ message: 'Wrong, credentials invalid' });
+  })
+
+/*
+  //   if (PASS_EXPIRY_CONFIG.unit === 'minutes') {
+  // expiresAt.setMinutes(expiresAt.getMinutes() + PASS_EXPIRY_CONFIG.value);
+  //   } else if (PASS_EXPIRY_CONFIG.unit === 'hours') {
+  // expiresAt.setHours(expiresAt.getHours() + PASS_EXPIRY_CONFIG.value);
+  //   } else {
+  // expiresAt.setDate(expiresAt.getDate() + PASS_EXPIRY_CONFIG.value);
+  //   }
+    
+
+*/

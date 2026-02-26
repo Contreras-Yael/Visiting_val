@@ -33,3 +33,28 @@ Live server
 Material icon theme
 Peacock
 Vscode’pokemon
+
+JWT, Angular
+
+
+Se crea en el constructor.
+
+Se conecta en el ngOnInit.
+
+Se dibuja en el ngAfterViewInit.
+
+Se muere en el ngOnDestroy.
+
+-------------------
+Construye (constructor): Crea la clase y pide los servicios (el "cableado"). El HTML aún no existe.
+
+Recibe (ngOnChanges): Revisa si el componente "padre" le mandó datos (los @Input).
+
+Arranca (ngOnInit): El momento clave. Aquí es donde tú llamas a tu API de MongoDB para traer los pases.
+
+Verifica (ngDoCheck): Se queda vigilando por si haces un clic o escribes algo para actualizar la pantalla.
+
+Renderiza (ngAfterViewInit): El HTML ya está dibujado al 100%. Aquí es donde inicializas las Gráficas o el Lector de QR.
+
+Limpia (ngOnDestroy): Justo antes de que el usuario cambie de pestaña. Sirve para apagar temporizadores y que la web no se trabe.
+---------------------
