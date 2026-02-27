@@ -1,12 +1,10 @@
-<div class="container py-4">
-  <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
-    <div class="card-body p-4">
-      <h3 class="text-center mb-4">Iniciar Sesión</h3>
+<div class="login-container">
+  <h2>Acceso Dueño</h2>
 
-      <input [(ngModel)]="login_data.email" placeholder="Usuario">
-      <input [(ngModel)]="login_data.password" type="password">
+  <input type="email" [(ngModel)]="usuario" placeholder="Correo (admin@example.com)">
+  <input type="password" [(ngModel)]="clave" placeholder="Contraseña (password123)">
 
-      <button (click)="entrar()" class="btn btn-dark btn-lg w-100 mb-4">Iniciar sesion</button>
-    </div>
-  </div>
+  <button (click)="hacerLogin()">Entrar</button>
+
+  <p *ngIf="error" style="color: red;">{{ error }}</p>
 </div>

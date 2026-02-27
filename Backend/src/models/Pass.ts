@@ -6,14 +6,14 @@ const passSchema = new Schema({
   accessCode: { type: String, unique: true },
   status: { 
     type: String, 
-    enum: ['PENDING', 'USED', 'EXPIRED'], 
-    default: 'PENDING' 
+    enum: ['PENDIENTE', 'USADO', 'EXPIRADO'], 
+    default: 'PENDIENTE' 
   },
-  visitingType:{
-    type: String,
-    enum: ['FRECUENTLY', 'UNIQUE', 'SERVICE'],
-    default: 'UNIQUE'
-  },
+  // visitingType:{
+  //   type: String,
+  //   enum: ['FRECUENTEMENTE', 'UNICO', 'SERVICIO'],
+  //   default: 'UNICO'
+  // },
   createdAt: { type: Date, default: Date.now },
   expiresAt: { type: Date },
   usedAt:{type: Date}
