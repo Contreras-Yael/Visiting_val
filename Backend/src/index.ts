@@ -1,20 +1,20 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
+//import cors from 'cors';
 import { Pass } from './models/Pass.js'; 
 import jwt from 'jsonwebtoken';
 //import e from 'express';
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+//use(cors());
 
 const PASS_EXPIRY_CONFIG = {
   value: 1,          // Cambiar este número
   unit: 'minuto'     // 'minuto', 'hora', 'dia'
 };
 
-const LLAVE_SECRETA = "clave";
+const llave= '123456789';
 
 mongoose.connect('mongodb://localhost:27017/visitorpass')
 .then(() => console.log('Conectado a MongoDB'))
@@ -89,12 +89,15 @@ app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
   if( email ==="ejemplo@correo" && password ==="Contra123") {
-    const token = jwt.sign({ email }, LLAVE_SECRETA, { expiresIn: '1h' });
+    const token = jwt.sign({ email }, llave, { expiresIn: '1h' });
     return res.json({ token });
   }
 
   res.status(401).json({ message: 'Email o contraseña inválidos' });
 });
 
+//const paylaod = {
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
 
+//interceptor, capta salidas http

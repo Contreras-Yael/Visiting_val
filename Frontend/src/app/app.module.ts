@@ -9,14 +9,16 @@ import { GeneratorComponent } from './components/generator/generator.component';
 import { ValidatorComponent } from './components/validator/validator.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserComponent } from './components/user/user.component';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './services/token.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     GeneratorComponent,
     ValidatorComponent,
-    DashboardComponent
+    DashboardComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +26,14 @@ import { UserComponent } from './components/user/user.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  //providers: [], parte de interceptores
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,10 +1,10 @@
 <div class="login-container">
   <h2>Acceso Dueño</h2>
 
-  <input type="email" [(ngModel)]="usuario" placeholder="Correo (admin@example.com)">
-  <input type="password" [(ngModel)]="clave" placeholder="Contraseña (password123)">
-
-  <button (click)="hacerLogin()">Entrar</button>
+  <input type="email" [(ngModel)]="usuario" name="usuario" placeholder="Correo (admin@example.com)">
+  <input type="password" [(ngModel)]="clave" name="clave" placeholder="Contraseña (password123)">
+<!-- ( email ==="ejemplo@correo" && password ==="Contra123") -->
+  <button (click)="entrar()">Entrar</button>
 
   <p *ngIf="error" style="color: red;">{{ error }}</p>
 </div>

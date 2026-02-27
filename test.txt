@@ -289,3 +289,10 @@ Limpia (ngOnDestroy): Justo antes de que el usuario cambie de pestaña. Sirve pa
     
 
 */
+
+
+
+
+
+instalaciones(No olvidar)
+npm install jsonwebtoken

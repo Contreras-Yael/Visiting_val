@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http'
-//import { PassService } from 'src/app/services/pass.service';
+import { PassService } from 'src/app/services/pass.service';
+//import { error } from 'console';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  //styleUrls: ['./user.component.scss']
+  styleUrls: ['./user.component.scss']
 })
 
 export class UserComponent {
@@ -14,10 +15,12 @@ export class UserComponent {
   usuario: string = '';
   clave: string = '';
 
+  error: string='';
  constructor( private http: HttpClient, private router: Router){}
 
   entrar(){
     const datos = {email: this.usuario, password: this.clave};
+
 
     this.http.post('http://localhost:3000/api/login', datos).subscribe({
       next: (res: any) => {
